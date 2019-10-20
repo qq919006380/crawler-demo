@@ -1,18 +1,22 @@
 var Crawler = require("crawler");
-var user=encodeURI('夏天夏')
-var c = new Crawler({
-    // 最大并发数默认为10
-    maxConnections : 1,
 
-    callback : function (error, res, done) {
-        if(error){
+var c = new Crawler({
+    maxConnections: 10,
+    // This will be called for each crawled page
+    callback: function (error, res, done) {
+        if (error) {
             console.log(error);
-        }else{
+        } else {
             var $ = res.$;
-            console.log($(".up-item .headline a").eq(0).text())
+            // $ is Cheerio by default
+            //a lean implementation of core jQuery designed specifically for the server
+            $(".cell img").map((val,xxx) => {
+                console.log($(xxx).attr('src'))
+            })
         }
         done();
     }
 });
 
-c.queue(`https://search.bilibili.com/upuser?keyword=`+user);
+// Queue just one URL, with default callback
+c.queue('https://cnodejs.org');
